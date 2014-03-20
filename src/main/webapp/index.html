@@ -1,62 +1,147 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-    </head>
-    <body>
-        <meta charset="utf-8">
-        <title>HelloWorld Web sockets</title>
-        <script language="javascript" type="text/javascript">
-            var wsUri = getRootUri() + "/websocket-test/wstest";
-            function getRootUri() {
-                return "ws://" + (document.location.hostname == "" ? "localhost" : document.location.hostname) + ":" +
-                        (document.location.port == "" ? "8080" : document.location.port);
+<head>
+    <title>WebSocket Sample (Adapted from Tomcat's echo sample)</title>
+    <style type="text/css">
+        #connect-container {
+            float: left;
+            width: 300px
+        }
+
+        #connect-container div {
+            padding: 5px;
+        }
+
+        #console-container {
+            float: left;
+            margin-left: 15px;
+            width: 560px;
+        }
+
+        #console {
+            border: 1px solid #CCCCCC;
+            border-right-color: #999999;
+            border-bottom-color: #999999;
+            height: 170px;
+            overflow-y: scroll;
+            padding: 5px;
+            width: 100%;
+        }
+
+        #console p {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+
+    <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+
+    <script type="text/javascript">
+        var ws = null;
+        var url = null;
+        var transports = [];
+
+        function setConnected(connected) {
+            document.getElementById('connect').disabled = connected;
+            document.getElementById('disconnect').disabled = !connected;
+            document.getElementById('echo').disabled = !connected;
+        }
+
+        function connect() {
+
+            if (window.location.protocol == 'http:') {
+                url = 'ws://' + window.location.host + '/websocket-test/wstest';
+            } else {
+                url = 'wss://' + window.location.host + '/websocket-test/wstest';
             }
-            function init() {
-                output = document.getElementById("output");
+
+            ws = new WebSocket(url); 
+
+            ws.onopen = function () {
+                setConnected(true);
+                log('Info: connection opened.');
+            };
+            ws.onmessage = function (event) {
+                log('Received: ' + event.data);
+            };
+            ws.onclose = function (event) {
+                setConnected(false);
+                log('Info: connection closed.');
+                log(event);
+            };
+        }
+
+        function disconnect() {
+            if (ws != null) {
+                ws.close();
+                ws = null;
             }
-            function send_message() {
-                websocket = new WebSocket(wsUri);
-                websocket.onopen = function(evt) {
-                    onOpen(evt)
-                };
-                websocket.onmessage = function(evt) {
-                    onMessage(evt)
-                };
-                websocket.onerror = function(evt) {
-                    onError(evt)
-                };
+            setConnected(false);
+        }
+
+        function echo() {
+            if (ws != null) {
+                var message = document.getElementById('message').value;
+                log('Sent: ' + message);
+                ws.send(message);
+            } else {
+                alert('connection not established, please connect.');
             }
-            function onOpen(evt) {
-                writeToScreen("Connected to Endpoint!");
-                doSend(textID.value);
+        }
+
+        function updateTransport(transport) {
+          transports = (transport == 'all') ?  [] : [transport];
+        }
+        
+        function log(message) {
+            var console = document.getElementById('console');
+            var p = document.createElement('p');
+            p.style.wordWrap = 'break-word';
+            p.appendChild(document.createTextNode(message));
+            console.appendChild(p);
+            while (console.childNodes.length > 25) {
+                console.removeChild(console.firstChild);
             }
-            function onMessage(evt) {
-                writeToScreen("Message Received: " + evt.data);
-            }
-            function onError(evt) {
-                writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
-            }
-            function doSend(message) {
-                writeToScreen("Message Sent: " + message);
-                websocket.send(message);
-            }
-            function writeToScreen(message) {
-                var pre = document.createElement("p");
-                pre.style.wordWrap = "break-word";
-                pre.innerHTML = message;
-                 
-                output.appendChild(pre);
-            }
-            window.addEventListener("load", init, false);
-        </script>
-        <h1 style="text-align: center;">Hello World WebSocket Client</h2>
-        <br>
-        <div style="text-align: center;">
-            <form action="">
-                <input onclick="send_message()" value="Send" type="button">
-                <input id="textID" name="message" value="Hello WebSocket!" type="text"><br>
-            </form>
+            console.scrollTop = console.scrollHeight;
+        }
+    </script>
+</head>
+<body>
+<noscript><h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websockets 
+    rely on Javascript being enabled. Please enable
+    Javascript and reload this page!</h2></noscript>
+<div>
+    <div id="connect-container">
+        <div>
+            <button id="connect" onclick="connect();">Connect</button>
+            <button id="disconnect" disabled="disabled" onclick="disconnect();">Disconnect</button>
         </div>
-        <div id="output"></div>
+        <div>
+            <textarea id="message" style="width: 250px">Here is a message!</textarea>
+        </div>
+        <div>
+            <button id="echo" onclick="echo();" disabled="disabled">Echo message</button>
+        </div>
+    </div>
+    <div id="console-container">
+        <div id="console"></div>
+    </div>
+</div>
 </body>
 </html>

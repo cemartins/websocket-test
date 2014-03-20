@@ -9,7 +9,9 @@ import javax.websocket.MessageHandler;
 import javax.websocket.Session;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class MyEndpoint extends Endpoint {
 
 	@Autowired
