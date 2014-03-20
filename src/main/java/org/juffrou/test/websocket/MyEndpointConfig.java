@@ -9,6 +9,10 @@ import javax.websocket.Encoder;
 import javax.websocket.Extension;
 import javax.websocket.server.ServerEndpointConfig;
 
+/**
+ * @author cem
+ *
+ */
 public class MyEndpointConfig implements ServerEndpointConfig {
 	@Override
 	public List<Class<? extends Encoder>> getEncoders() {

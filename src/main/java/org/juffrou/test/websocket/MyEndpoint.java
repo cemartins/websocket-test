@@ -6,14 +6,9 @@ import javax.websocket.CloseReason;
 import javax.websocket.Endpoint;
 import javax.websocket.EndpointConfig;
 import javax.websocket.MessageHandler;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
 import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.WebApplicationContext;
 
 public class MyEndpoint extends Endpoint {
 
@@ -49,7 +44,8 @@ public class MyEndpoint extends Endpoint {
 		@Override
 		public void onMessage(String message) {
 			try {
-				session.getBasicRemote().sendText("Got your message (" + message + "). Thanks !");
+				String greeting = myService.getGreeting();
+				session.getBasicRemote().sendText(greeting + " got your message (" + message + "). Thanks !");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

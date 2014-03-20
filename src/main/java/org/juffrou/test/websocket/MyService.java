@@ -2,6 +2,11 @@ package org.juffrou.test.websocket;
 
 import org.springframework.stereotype.Service;
 
+/**
+ * Spring bean. This bean will be automatically injected in MyEndpoint and used to compose the reply message.
+ * @author cem
+ *
+ */
 @Service
 public class MyService {
 	
