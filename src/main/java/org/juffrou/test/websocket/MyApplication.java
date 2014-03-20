@@ -30,7 +30,7 @@ public class MyApplication implements ServletContextListener {
 
 		final ServerContainer serverContainer = (ServerContainer) container.getAttribute(SERVER_CONTAINER_ATTRIBUTE);
 		try {
-			serverContainer.addEndpoint(new MyEndpointConfig());
+			serverContainer.addEndpoint(new MyEndpointConfig(MyEndpoint.class, "/wstest"));
 		} catch (DeploymentException e) {
 			e.printStackTrace();
 		}
@@ -40,7 +40,5 @@ public class MyApplication implements ServletContextListener {
 	
 	@Override
 	public void contextDestroyed(ServletContextEvent sce) {
-		// TODO Auto-generated method stub
-		
 	}
 }

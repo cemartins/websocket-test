@@ -14,6 +14,15 @@ import javax.websocket.server.ServerEndpointConfig;
  *
  */
 public class MyEndpointConfig implements ServerEndpointConfig {
+
+	private final String path;
+	private final Class<?> endpointClass;
+	
+	MyEndpointConfig(Class<?> endpointClass, String path) {
+		this.endpointClass = endpointClass;
+		this.path = path;
+	}
+	
 	@Override
 	public List<Class<? extends Encoder>> getEncoders() {
 		return Collections.emptyList();
@@ -36,7 +45,7 @@ public class MyEndpointConfig implements ServerEndpointConfig {
 
 	@Override
 	public Class<?> getEndpointClass() {
-		return MyEndpoint.class;
+		return endpointClass;
 	}
 
 	@Override
@@ -46,7 +55,7 @@ public class MyEndpointConfig implements ServerEndpointConfig {
 
 	@Override
 	public String getPath() {
-		return "/wstest";
+		return path;
 	}
 
 	@Override
