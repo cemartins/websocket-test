@@ -1,6 +1,11 @@
 package org.juffrou.test.websocket;
 
+import java.io.IOException;
+
+import javax.websocket.CloseReason;
+import javax.websocket.Endpoint;
 import javax.websocket.EndpointConfig;
+import javax.websocket.MessageHandler;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
@@ -10,8 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
-@ServerEndpoint(value="/wstest", configurator = SpringConfigurator.class)
-public class MyEndpoint {
+public class MyEndpoint extends Endpoint {
 
 	@Autowired
 	MyService myService;
@@ -20,24 +24,35 @@ public class MyEndpoint {
 		System.out.println("MyEndpoint instanciated");
 	}
 	
-	@OnOpen
-	public void myOnOpen(Session session, EndpointConfig config) {
+	@Override
+	public void onOpen(Session session, EndpointConfig config) {
+		
 		System.out.println("websocket connection opened");
-		WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();
-		if (wac == null) {
-			String message = "Failed to find the root WebApplicationContext. Was ContextLoaderListener not used?";
-			throw new IllegalStateException(message);
-		}
-		myService = wac.getBean(MyService.class);
-		if(myService != null)
-			System.out.println("Success");
-		else
-			System.out.println("Can't find bean");
+		
+		session.addMessageHandler(new MyMessageHandler(session));
 	}
 	
-	@OnMessage
-	public String myOnMessage(String message, Session session) {
-		System.out.println("message received");
-		return myService == null ? "myService is null" : myService.getGreeting() + " " + message;
+	@Override
+	public void onClose(Session session, CloseReason closeReason) {
+		super.onClose(session, closeReason);
+		System.out.println("websocket connection closed");
+	}
+	
+	class MyMessageHandler implements MessageHandler.Whole<String> {
+
+		final Session session;
+		
+		public MyMessageHandler(Session session) {
+			this.session = session;
+		}
+		
+		@Override
+		public void onMessage(String message) {
+			try {
+				session.getBasicRemote().sendText("Got your message (" + message + "). Thanks !");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
