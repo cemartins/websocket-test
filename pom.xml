@@ -28,6 +28,17 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>9.1.3.v20140225</version>
+				<configuration>
+					<war>${basedir}/target/${project.artifactId}.war</war>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 
 	<dependencies>

@@ -22,7 +22,7 @@ public class MyEndpoint extends Endpoint {
 	@Override
 	public void onOpen(Session session, EndpointConfig config) {
 		
-		System.out.println("websocket connection opened");
+		System.out.println("websocket connection opened: " + session.getId());
 		
 		session.addMessageHandler(new MyMessageHandler(session));
 	}
@@ -30,7 +30,12 @@ public class MyEndpoint extends Endpoint {
 	@Override
 	public void onClose(Session session, CloseReason closeReason) {
 		super.onClose(session, closeReason);
-		System.out.println("websocket connection closed");
+		System.out.println("websocket connection closed: " + session.getId());
+	}
+	
+	@Override
+	public void onError(Session session, Throwable thr) {
+		System.out.println("websocket connection exception: " + session.getId() + " threw " + thr.getClass().getSimpleName());
 	}
 	
 	class MyMessageHandler implements MessageHandler.Whole<String> {
@@ -45,7 +50,7 @@ public class MyEndpoint extends Endpoint {
 		public void onMessage(String message) {
 			try {
 				String greeting = myService.getGreeting();
-				session.getBasicRemote().sendText(greeting + " got your message (" + message + "). Thanks !");
+				session.getBasicRemote().sendText(greeting + ", got your message (" + message + "). Thanks ! (session: " + session.getId() + ")");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

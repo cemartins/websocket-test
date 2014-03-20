@@ -13,7 +13,13 @@ implementing a ServerEndpointConfig and adding it to the server container upon s
 This way, the endpoint instance will be provided by SpringConfigurator, which means it can itself be a spring bean and/or it
 can have spring dependencies automatically injected with the `@Autowired` annotation.
 
-To build the `websocket-test.war` file execute the maven command `mvn package`. And You can test this application with WildFly 8:
+To build the `websocket-test.war` file execute the maven command `mvn package`.
+
+You can run the webapp with jetty with the maven command `mvn jetty:run`
+* start your browser and access the url `http://localhost:8080/websocket-test/index.html`
+* type a message, press the button "Send" and see the response message.
+
+You can also deploy and run websocket-test in WildFly 8:
 * add `websocket-test.war` to `WILDFLY_HOME/standalone/deployments
 * start WildFly 8
 * start your browser and access the url `http://localhost:8080/websocket-test/index.html`
