@@ -4,8 +4,8 @@ websocket-test
 Small webapp to demonstrate one way to setup websockets with spring framework version 3.x.
 
 This application sets up a websocket server endpoint with uri `/wstest` which will use a `@Autowired` spring bean
-to select a greeting word and reply to a websocket message. The websocket connection and initial message is
-initiated by an html page (`index.html`) running in a browser that supports websockets.
+to select a greeting word and reply to a websocket message. The websocket connection is initiated and the messages
+are sent by an html page (`index.html`) running in a browser that supports websockets.
 
 It works around the Servlet container's scan for WebSocket endpoints by not using the `@ServerEndpoint` annotation and instead
 implementing a ServerEndpointConfig and adding it to the server container upon servlet context initialization.
