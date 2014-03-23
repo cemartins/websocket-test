@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>org.juffrou.test</groupId>
-        <artifactId>websocket-test</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
+	<parent>
+		<groupId>org.juffrou.test</groupId>
+		<artifactId>websocket-test</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
 	<artifactId>websocket-server</artifactId>
 	<packaging>war</packaging>
 
@@ -14,6 +14,7 @@
 	</properties>
 	<build>
 		<finalName>${project.artifactId}</finalName>
+
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -26,6 +27,33 @@
 		</pluginManagement>
 
 		<plugins>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+
+					<artifactItems>
+						<artifactItem>
+							<groupId>${project.groupId}</groupId>
+							<artifactId>websocket-client</artifactId>
+							<version>${project.version}</version>
+							<type>zip</type>
+						</artifactItem>
+					</artifactItems>
+
+					<localRepositoryDirectory>${basedir}/..</localRepositoryDirectory>
+					<outputDirectory>${project.build.directory}/${project.build.finalName}/webstart</outputDirectory>
+
+				</configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
@@ -64,6 +92,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
 			<version>3.1.4.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.codehaus.mojo</groupId>
+			<artifactId>webstart-jnlp-servlet</artifactId>
+			<version>1.0-beta-6</version>
 		</dependency>
 	</dependencies>
 </project>
