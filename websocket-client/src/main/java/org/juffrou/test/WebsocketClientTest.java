@@ -3,9 +3,13 @@ package org.juffrou.test;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.TimeUnit;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import javax.websocket.ClientEndpointConfig;
 import javax.websocket.DeploymentException;
@@ -13,32 +17,48 @@ import javax.websocket.DeploymentException;
 import org.glassfish.tyrus.client.ClientManager;
 import org.juffrou.test.websocket.client.MyClientEndpoint;
 
-public class WebsocketClientTest {
+public class WebsocketClientTest extends Application {
 
-	public static CountDownLatch messageLatch;
+    private static final String SERVER_URL="ws://localhost:8080/websocket-test/wstest";
     
-	public static void main(String[] args) {
-		
-		messageLatch = new CountDownLatch(1);
+    ClientManager client;
 
-		final ClientEndpointConfig cec = ClientEndpointConfig.Builder.create().build();
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		initWebsocketClient();
+		primaryStage.setTitle("Websocket Messaging Client");
+
+		Parent root = FXMLLoader.load(getClass().getResource("WebsocketClientTest.fxml"));
+		Scene scene = new Scene(root, 480, 320);
+		primaryStage.setScene(scene);
+		
+		primaryStage.show();
+	}
+	
+	@Override
+	public void stop() throws Exception {
+		ExecutorService executor = client.getExecutorService();
+		executor.shutdownNow();
+		super.stop();
+	}
+
+	private void initWebsocketClient() {
+		ClientEndpointConfig cec = ClientEndpointConfig.Builder.create().build();
 		
 		try {
 			
-			ClientManager client = ClientManager.createClient();
+			client = ClientManager.createClient();
 			
-			client.connectToServer(new MyClientEndpoint(), cec, new URI("ws://localhost:8080/websocket-test/wstest"));
-			ExecutorService executor = client.getExecutorService();
-			messageLatch.await(100, TimeUnit.SECONDS);
-			executor.shutdown();
+			client.connectToServer(new MyClientEndpoint(), cec, new URI(SERVER_URL));
 			
 		} catch (DeploymentException | IOException | URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
 
+	}
+	
+	public static void main(String[] args) {
+		launch(args);
+	}
+	
 }

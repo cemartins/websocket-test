@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="$encoding"?>
 <jnlp
     spec="$jnlpspec"
+    xmlns:jfx="http://javafx.com" 
     codebase="$jnlpCodebase"
     href="$outputFile">
   <information>
@@ -27,8 +28,10 @@
 #end
   <resources>
     <j2se version="$j2seVersion"/>
+    <jfx:javafx-runtime version="2.2+"/>
      $dependencies
      $extensions
   </resources>
   <application-desc main-class="$mainClass"/>
+  <jfx:javafx-desc  width="480" height="320" main-class="$mainClass"  name="$project.Name" />
 </jnlp>

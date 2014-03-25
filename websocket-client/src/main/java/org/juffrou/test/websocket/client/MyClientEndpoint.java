@@ -7,8 +7,6 @@ import javax.websocket.EndpointConfig;
 import javax.websocket.MessageHandler;
 import javax.websocket.Session;
 
-import org.juffrou.test.WebsocketClientTest;
-
 public class MyClientEndpoint extends Endpoint {
 
 	private static final String SENT_MESSAGE = "Hello World";
@@ -30,7 +28,6 @@ public class MyClientEndpoint extends Endpoint {
 		@Override
 		public void onMessage(String message) {
 			System.out.println("Received message: "+message);
-			WebsocketClientTest.messageLatch.countDown();
 		}
 	}
 }
