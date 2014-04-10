@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="$encoding"?>
 <jnlp
     spec="$jnlpspec"
-    xmlns:jfx="http://javafx.com" 
-    codebase="$jnlpCodebase"
+    xmlns:jfx="http://javafx.com"
+    codebase="http://localhost:8080/websocket-test/webstart/" 
     href="$outputFile">
   <information>
 #if($project.Name)
