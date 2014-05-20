@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 public class MyEndpoint extends Endpoint {
 
 	@Autowired
-	MyService myService;
+	private MyService myService;
 	
 	public MyEndpoint() {
-		System.out.println("MyEndpoint instanciated");
+		System.out.println("SERVER ENDPOINT INSTANCIATED");
 	}
 	
 	@Override
@@ -52,7 +52,7 @@ public class MyEndpoint extends Endpoint {
 		public void onMessage(String message) {
 			try {
 				String greeting = myService.getGreeting();
-				session.getBasicRemote().sendText(greeting + ", got your message (" + message + "). Thanks ! (session: " + session.getId() + ")");
+				session.getBasicRemote().sendText(greeting + ", got your message (" + message + "). Thanks!");
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

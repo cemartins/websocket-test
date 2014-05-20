@@ -6,12 +6,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.paint.*?>
 
-<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="492.0" prefWidth="637.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="492.0" prefWidth="637.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.juffrou.test.WebsocketClientController">
   <children>
     <GridPane alignment="TOP_RIGHT" prefHeight="419.0" prefWidth="552.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
-        <TextArea id="sendTestArea" fx:id="sendTextArea" prefHeight="193.0" prefWidth="609.0" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <Button fx:id="sendButton" mnemonicParsing="false" prefWidth="58.0" text="Send" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <TextArea id="sendTestArea" fx:id="sendTextArea" prefHeight="193.0" prefWidth="609.0" promptText="Type message to server" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <Button fx:id="sendButton" mnemonicParsing="false" onAction="#sendButtonPressed" prefHeight="26.0" prefWidth="320.0" text="Send message to Server" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
         <TextArea fx:id="receiveTextArea" prefHeight="240.0" prefWidth="523.0" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="2" />
       </children>
       <columnConstraints>
@@ -19,7 +19,7 @@
       </columnConstraints>
       <rowConstraints>
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-        <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" valignment="TOP" vgrow="SOMETIMES" />
+        <RowConstraints maxHeight="40.0" minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
       </rowConstraints>
     </GridPane>
