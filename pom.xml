@@ -25,12 +25,18 @@
 					<artifactId>webstart-maven-plugin</artifactId>
 					<version>1.0-beta-6</version>
 				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>keytool-maven-plugin</artifactId>
+					<version>1.5</version>
+				</plugin>
+
 			</plugins>
 		</pluginManagement>
 	</build>
 
-    <modules>
-        <module>websocket-client</module>
-        <module>websocket-server</module>
-    </modules>
+	<modules>
+		<module>websocket-client</module>
+		<module>websocket-server</module>
+	</modules>
 </project>

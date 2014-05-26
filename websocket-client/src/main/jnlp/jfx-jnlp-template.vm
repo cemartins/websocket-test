@@ -2,7 +2,7 @@
 <jnlp
     spec="$jnlpspec"
     xmlns:jfx="http://javafx.com"
-    codebase="http://localhost:8080/websocket-test/webstart/" 
+    codebase="http://gugasasha:8080/websocket-test/webstart/" 
     href="$outputFile">
   <information>
 #if($project.Name)
@@ -28,7 +28,7 @@
 #end
   <resources>
     <j2se version="$j2seVersion"/>
-    <jfx:javafx-runtime version="2.2+"/>
+    <jfx:javafx-runtime version="8+"/>
      $dependencies
      $extensions
   </resources>
