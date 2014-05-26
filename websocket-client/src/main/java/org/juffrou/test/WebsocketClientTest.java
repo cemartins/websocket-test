@@ -17,12 +17,18 @@ import javax.websocket.ClientEndpointConfig;
 import javax.websocket.DeploymentException;
 
 import org.glassfish.tyrus.client.ClientManager;
+import org.glassfish.tyrus.container.jdk.client.JdkClientContainer;
 
 public class WebsocketClientTest extends Application {
 
     private static final String SERVER_URL="ws://localhost:8080/websocket-test/wstest";
     
-    ClientManager client = null;
+    private ClientManager client = null;
+
+    
+    public static void main(String[] args) {
+		launch(args);
+	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -52,7 +58,22 @@ public class WebsocketClientTest extends Application {
 		
 		primaryStage.show();
 	}
-	
+
+	private void initWebsocketClient(WebsocketClientController controller) {
+		ClientEndpointConfig cec = ClientEndpointConfig.Builder.create().build();
+		
+		try {
+			
+			client = ClientManager.createClient(JdkClientContainer.class.getName());
+			
+			client.connectToServer(controller, cec, new URI(SERVER_URL));
+			
+		} catch (DeploymentException | IOException | URISyntaxException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	@Override
 	public void stop() throws Exception {
 		if(client != null) {
@@ -63,23 +84,4 @@ public class WebsocketClientTest extends Application {
 		}
 	}
 
-	private void initWebsocketClient(WebsocketClientController controller) {
-		ClientEndpointConfig cec = ClientEndpointConfig.Builder.create().build();
-		
-		try {
-			
-			client = ClientManager.createClient();
-			
-			client.connectToServer(controller, cec, new URI(SERVER_URL));
-			
-		} catch (DeploymentException | IOException | URISyntaxException e) {
-			e.printStackTrace();
-		}
-
-	}
-	
-	public static void main(String[] args) {
-		launch(args);
-	}
-	
 }
