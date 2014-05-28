@@ -14,13 +14,26 @@
 
 	<properties>
 		<javafx.tools.ant.jar>${java.home}/../lib/ant-javafx.jar</javafx.tools.ant.jar>
-		<exec.mainClass>org.juffrou.test.WebsocketClientTest</exec.mainClass>
 	</properties>
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
 
 		<plugins>
+			<plugin>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Application-Name>${project.name}</Application-Name>
+							<Permissions>all-permissions</Permissions>
+							<JavaFX-Version>8+</JavaFX-Version>
+							<JavaFX-Application-Class>${exec.mainClass}</JavaFX-Application-Class>
+							<Main-Class>${exec.mainClass}</Main-Class>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -29,6 +42,7 @@
 					<mainClass>${exec.mainClass}</mainClass>
 				</configuration>
 			</plugin>
+			<!-- 
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
@@ -89,11 +103,13 @@
 
 				</dependencies>
 			</plugin>
+			 -->
 		</plugins>
 	</build>
 
 	<dependencies>
 		<!-- JAVA FX -->
+		<!-- 
 		<dependency>
 			<groupId>com.oracle</groupId>
 			<artifactId>javafx</artifactId>
@@ -101,6 +117,7 @@
 			<systemPath>${java.home}/lib/ext/jfxrt.jar</systemPath>
 			<scope>system</scope>
 		</dependency>
+		 -->
 		<dependency>
 			<groupId>javax.websocket</groupId>
 			<artifactId>javax.websocket-api</artifactId>

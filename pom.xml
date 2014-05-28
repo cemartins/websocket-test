@@ -7,8 +7,10 @@
 	<packaging>pom</packaging>
 
 	<properties>
-
+		<exec.mainClass>org.juffrou.test.WebsocketClientTest</exec.mainClass>
+		<jdk.version>1.8</jdk.version>
 	</properties>
+
 	<build>
 		<pluginManagement>
 			<plugins>

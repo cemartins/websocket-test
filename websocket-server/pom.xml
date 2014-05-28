@@ -27,6 +27,7 @@
 		</pluginManagement>
 
 		<plugins>
+			<!-- 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -47,11 +48,105 @@
 					</execution>
 				</executions>
 			</plugin>
+			 -->
+			 <plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>webstart-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>jnlp-download-servlet</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<outputDirectoryName>webstart</outputDirectoryName>
+					
+					<!--
+          				Set to true to exclude all transitive dependencies. Default is false.
+          			-->
+          			<excludeTransitive>false</excludeTransitive>
+          			
+          			<encoding>UTF-8</encoding>
+          			
+          			<filenameMapping>simple</filenameMapping>
+          			
+          			<jnlpFiles>
+          				<jnlpFile>
+          					<inputTemplate>jfx-jnlp-template.vm</inputTemplate>
+          					<outputFilename>launch.jnlp</outputFilename>
+          					<mainClass>${exec.mainClass}</mainClass>
+          					
+          					<properties>
+          						<!-- properties to pass to the velocity engine -->
+          						<jdkVersion>1.8+</jdkVersion>
+          					</properties>
+          					<jarResources>
+          						<jarResource>
+          							<groupId>${project.groupId}</groupId>
+          							<artifactId>websocket-client</artifactId>
+          							<version>${project.version}</version>
+          							<outputJarVersion>false</outputJarVersion>
+          							<mainClass>${exec.mainClass}</mainClass>
+          						</jarResource>
+          					</jarResources>
+          				</jnlpFile>
+          			</jnlpFiles>
+          			
+				
+					<makeArchive>true</makeArchive>
+					<updateManifestEntries>
+						<Application-Name>${project.name}</Application-Name>
+						<Permissions>all-permissions</Permissions>
+						<JavaFX-Version>8+</JavaFX-Version>
+						<JavaFX-Application-Class>${exec.mainClass}</JavaFX-Application-Class>
+						<Main-Class>${exec.mainClass}</Main-Class>
+					</updateManifestEntries>
+
+					<sign>
+						<keystore>${project.build.directory}/keyStore</keystore>
+						<keypass>password</keypass>
+						<storepass>password</storepass>
+						<alias>webstart</alias>
+						<validity>365</validity>
+
+						<dnameCn>Carlos E Martins</dnameCn>
+						<dnameOu>None</dnameOu>
+						<dnameO>Home</dnameO>
+						<dnameL>Oeiras</dnameL>
+						<dnameSt>Lisboa</dnameSt>
+						<dnameC>PT</dnameC>
+
+						<verify>true</verify>
+
+						<keystoreConfig>
+							<delete>true</delete>
+							<gen>true</gen>
+						</keystoreConfig>
+					</sign>
+					
+					<unsign>true</unsign>  <!-- unsign already signed packages and sign them with own key -->
+					
+					<verifyjar>false</verifyjar>
+					
+					<verbose>true</verbose>
+
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>keytool-maven-plugin</artifactId>
+						<version>1.5</version>
+					</dependency>
+
+				</dependencies>
+			</plugin>
 
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.2.0.RC0</version>
+				<version>9.2.0.v20140526</version>
 				<configuration>
 					<contextPath>/websocket-test</contextPath>
 				</configuration>

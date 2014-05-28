@@ -3,9 +3,11 @@ package org.juffrou.test;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 
 import javafx.application.Application;
+import javafx.application.Application.Parameters;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -72,6 +74,22 @@ public class WebsocketClientTest extends Application {
 			e.printStackTrace();
 		}
 
+	}
+	
+	@Override
+	public void init() throws Exception {
+		super.init();
+		Parameters parameters = getParameters();
+		if(parameters != null) {
+			
+			System.out.println("Parameters");
+			
+			for(Entry<String, String> entry : parameters.getNamed().entrySet()) {
+				System.out.println("Key:   " + entry.getKey());
+				System.out.println("Value: " + entry.getValue());
+			}
+		}
+		
 	}
 
 	@Override

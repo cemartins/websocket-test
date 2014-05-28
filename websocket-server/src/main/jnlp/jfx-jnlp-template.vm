@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="$encoding"?>
+<jnlp
+    spec="$jnlpspec"
+    xmlns:jfx="http://javafx.com"
+    codebase="$$codebase" 
+    href="$outputFile">
+  <information>
+  	<title>Websocket JavaFX Test</title>
+    <vendor>Carlos Martins</vendor>
+    <homepage href="${project.Url}"/>
+    <description>Small JavaFX application to demo websocket usage</description>
+    <offline-allowed>false</offline-allowed>
+  </information>
+  <security>
+     <all-permissions/>
+  </security>
+
+  <resources>
+    <j2se version="${jdkVersion}"/>
+    <jfx:javafx-runtime version="8+"/>
+     $dependencies
+#if($extensions)
+   	$extensions
+#end
+  </resources>
+  <application-desc main-class="$mainClass"/>
+  <jfx:javafx-desc  width="480" height="320" main-class="$mainClass"  name="Websocket JavaFX Test" />
+  <fx:argument>$$codebase</fx:argument>
+</jnlp>
