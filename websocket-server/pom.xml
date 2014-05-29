@@ -94,16 +94,6 @@
           				</jnlpFile>
           			</jnlpFiles>
           			
-				
-					<makeArchive>true</makeArchive>
-					<updateManifestEntries>
-						<Application-Name>${project.name}</Application-Name>
-						<Permissions>all-permissions</Permissions>
-						<JavaFX-Version>8+</JavaFX-Version>
-						<JavaFX-Application-Class>${exec.mainClass}</JavaFX-Application-Class>
-						<Main-Class>${exec.mainClass}</Main-Class>
-					</updateManifestEntries>
-
 					<sign>
 						<keystore>${project.build.directory}/keyStore</keystore>
 						<keypass>password</keypass>
@@ -127,8 +117,8 @@
 					</sign>
 					
 					<unsign>true</unsign>  <!-- unsign already signed packages and sign them with own key -->
-					
-					<verifyjar>false</verifyjar>
+					<gzip>false</gzip>
+					<verifyjar>true</verifyjar>
 					
 					<verbose>true</verbose>
 

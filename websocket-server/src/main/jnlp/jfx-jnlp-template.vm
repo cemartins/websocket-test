@@ -25,5 +25,5 @@
   </resources>
   <application-desc main-class="$mainClass"/>
   <jfx:javafx-desc  width="480" height="320" main-class="$mainClass"  name="Websocket JavaFX Test" />
-  <fx:argument>$$codebase</fx:argument>
+  <fx:argument>$$context</fx:argument>
 </jnlp>
