@@ -1,6 +1,8 @@
 package org.juffrou.test;
 
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -12,12 +14,19 @@ import javax.websocket.CloseReason;
 import javax.websocket.Endpoint;
 import javax.websocket.EndpointConfig;
 import javax.websocket.MessageHandler;
+import javax.websocket.PongMessage;
 import javax.websocket.Session;
 
 public class WebsocketClientController extends Endpoint {
 
 	@FXML
 	private Button sendButton;
+	
+	@FXML
+	private Button startPongButton;
+	
+	@FXML
+	private Button stopPongButton;
 	
 	@FXML
 	private TextArea sendTextArea;
@@ -28,14 +37,25 @@ public class WebsocketClientController extends Endpoint {
 	private Session session = null;
 	
 
+	@SuppressWarnings("restriction")
 	@FXML
 	private void sendButtonPressed(ActionEvent action) {
-		try {
-			// Send message to server
-			session.getBasicRemote().sendText(sendTextArea.getText());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		// Send message to server
+		String text = sendTextArea.getText();
+		session.getAsyncRemote().sendText(text);
+	}
+	
+	@SuppressWarnings("restriction")
+	@FXML
+	private void startPongButtonPressed(ActionEvent action) {
+		session.getAsyncRemote().sendText("STARTPONGING");
+	}
+	
+	@SuppressWarnings("restriction")
+	@FXML
+	private void stopPongButtonPressed(ActionEvent action) {
+		session.getAsyncRemote().sendText("STOPPONGING");
+		receiveTextArea.clear();
 	}
 
 	
@@ -58,6 +78,9 @@ public class WebsocketClientController extends Endpoint {
 			   });
 			}
 		});
+
+		session.addMessageHandler(new MyPongHandler(session));
+
 	}
 	
 	@Override
@@ -71,5 +94,42 @@ public class WebsocketClientController extends Endpoint {
 	public void onClose(Session session, CloseReason closeReason) {
 		super.onClose(session, closeReason);
 		System.out.println("CLIENT DISCONNECTED");
+	}
+	
+	/**
+	 * Receives a PONG from the server and sends a PONG to the server
+	 * @author cemartins
+	 *
+	 */
+	private class MyPongHandler implements MessageHandler.Whole<PongMessage> {
+		private final Session session;
+		private final ByteBuffer pongload;
+
+		public MyPongHandler(Session session) {
+			this.session = session;
+			this.pongload = ByteBuffer.wrap("asdfghjkl".getBytes(Charset.defaultCharset()));
+		}
+		
+		@Override
+		public void onMessage(PongMessage message) {
+			try {
+				Platform.runLater(new Runnable() {
+			        @Override
+			        public void run() {
+						receiveTextArea.appendText("Pong...\n");
+			        }
+			   });
+
+				Thread.sleep(1000);
+				
+				session.getAsyncRemote().sendPong(pongload);
+				
+			} catch (IllegalArgumentException | IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 }

@@ -95,30 +95,31 @@
           			</jnlpFiles>
           			
 					<sign>
-						<keystore>${project.build.directory}/keyStore</keystore>
-						<keypass>password</keypass>
-						<storepass>password</storepass>
-						<alias>webstart</alias>
+						<!-- Properties collected from settings.xml -->
+						<keystore>${keystore.dir}/${keystore.file}</keystore>
+						<keypass>${certificate.pass}</keypass>
+						<storepass>${keystore.pass}</storepass>
+						<alias>${certificate.alias}</alias>
+						<!-- 
 						<validity>365</validity>
-
 						<dnameCn>Carlos E Martins</dnameCn>
 						<dnameOu>None</dnameOu>
 						<dnameO>Home</dnameO>
 						<dnameL>Oeiras</dnameL>
 						<dnameSt>Lisboa</dnameSt>
 						<dnameC>PT</dnameC>
+						 -->
 
 						<verify>true</verify>
 
 						<keystoreConfig>
-							<delete>true</delete>
-							<gen>true</gen>
+							<delete>false</delete>
+							<gen>false</gen>
 						</keystoreConfig>
 					</sign>
 					
-					<unsign>true</unsign>  <!-- unsign already signed packages and sign them with own key -->
+					<!-- <unsign>true</unsign>  --> <!-- unsign already signed packages and sign them with own key -->
 					<gzip>false</gzip>
-					<verifyjar>true</verifyjar>
 					
 					<verbose>true</verbose>
 

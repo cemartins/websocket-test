@@ -126,12 +126,12 @@
 		<dependency>
 			<groupId>org.glassfish.tyrus</groupId>
 			<artifactId>tyrus-client</artifactId>
-			<version>1.6</version>
+			<version>1.8.3</version>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish.tyrus</groupId>
 			<artifactId>tyrus-container-jdk-client</artifactId>
-			<version>1.6</version>
+			<version>1.8.3</version>
 		</dependency>
 	</dependencies>
 </project>

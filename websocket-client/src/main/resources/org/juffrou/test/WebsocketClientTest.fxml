@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import java.util.*?>
 <?import javafx.scene.control.*?>
@@ -11,8 +12,17 @@
     <GridPane alignment="TOP_RIGHT" prefHeight="419.0" prefWidth="552.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
       <children>
         <TextArea id="sendTestArea" fx:id="sendTextArea" prefHeight="193.0" prefWidth="609.0" promptText="Type message to server" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <Button fx:id="sendButton" mnemonicParsing="false" onAction="#sendButtonPressed" prefHeight="26.0" prefWidth="320.0" text="Send message to Server" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
         <TextArea fx:id="receiveTextArea" prefHeight="240.0" prefWidth="523.0" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" GridPane.rowIndex="1">
+               <children>
+              <Button fx:id="sendButton" mnemonicParsing="false" onAction="#sendButtonPressed" prefHeight="26.0" prefWidth="320.0" text="Send message to Server" />
+                  <Button fx:id="startPongButton" mnemonicParsing="false" onAction="#startPongButtonPressed" text="Start Pong" />
+                  <Button fx:id="stopPongButton" mnemonicParsing="false" onAction="#stopPongButtonPressed" text="Stop Pong" />
+               </children>
+               <GridPane.margin>
+                  <Insets />
+               </GridPane.margin>
+            </HBox>
       </children>
       <columnConstraints>
         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

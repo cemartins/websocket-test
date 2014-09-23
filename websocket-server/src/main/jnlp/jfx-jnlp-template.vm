@@ -1,3 +1,4 @@
+TS: ${buildTS}
 <?xml version="1.0" encoding="$encoding"?>
 <jnlp
     spec="$jnlpspec"
@@ -7,7 +8,7 @@
   <information>
   	<title>Websocket JavaFX Test</title>
     <vendor>Carlos Martins</vendor>
-    <homepage href="${project.Url}"/>
+    <homepage href="${homepage.url}"/>
     <description>Small JavaFX application to demo websocket usage</description>
     <offline-allowed>false</offline-allowed>
   </information>

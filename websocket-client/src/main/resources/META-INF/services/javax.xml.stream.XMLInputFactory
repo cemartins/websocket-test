@@ -1,0 +1,1 @@
+# this file is needed (in JNLP apps) to void FXMLLoader to try and get fxml files from the server (see https://javafx-jira.kenai.com/browse/RT-25130). 
