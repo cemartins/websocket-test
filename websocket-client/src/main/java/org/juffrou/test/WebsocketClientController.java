@@ -7,6 +7,9 @@ import java.nio.charset.Charset;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 
@@ -18,6 +21,9 @@ import javax.websocket.PongMessage;
 import javax.websocket.Session;
 
 public class WebsocketClientController extends Endpoint {
+	
+	@FXML
+	private Parent root;		// allows the controller to get it's corresponding stage
 
 	@FXML
 	private Button sendButton;
@@ -94,6 +100,14 @@ public class WebsocketClientController extends Endpoint {
 	public void onClose(Session session, CloseReason closeReason) {
 		super.onClose(session, closeReason);
 		System.out.println("CLIENT DISCONNECTED");
+	}
+	
+	/**
+	 * Obtain this controller's stage
+	 * @return the controller stage
+	 */
+	protected Stage getStage() {
+		return (Stage) root.getScene().getWindow();
 	}
 	
 	/**

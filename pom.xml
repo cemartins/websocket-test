@@ -9,6 +9,7 @@
 	<properties>
 		<exec.mainClass>org.juffrou.test.WebsocketClientTest</exec.mainClass>
 		<jdk.version>1.8</jdk.version>
+		<project.encoding>utf-8</project.encoding>
 		<homepage.url>https://github.com/cemartins/websocket-test</homepage.url>
 	</properties>
 
@@ -21,6 +22,14 @@
 					<configuration>
 						<source>${jdk.version}</source>
 						<target>${jdk.version}</target>
+						<encoding>${project.encoding}</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>2.6</version>
+					<configuration>
+						<encoding>${project.encoding}</encoding>
 					</configuration>
 				</plugin>
 				<plugin>
