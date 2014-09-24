@@ -97,6 +97,7 @@
 					<sign>
 						<!-- Properties collected from settings.xml -->
 						<keystore>${keystore.dir}/${keystore.file}</keystore>
+						<storetype>${keystore.type}</storetype>
 						<keypass>${certificate.pass}</keypass>
 						<storepass>${keystore.pass}</storepass>
 						<alias>${certificate.alias}</alias>
