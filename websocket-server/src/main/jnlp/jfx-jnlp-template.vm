@@ -24,7 +24,7 @@ TS: ${buildTS}
    	$extensions
 #end
   </resources>
-  <application-desc main-class="$mainClass"/>
-  <jfx:javafx-desc  width="480" height="320" main-class="$mainClass"  name="Websocket JavaFX Test" />
-  <fx:argument>$$context</fx:argument>
+  <jfx:javafx-desc  width="512" height="320" main-class="$mainClass"  name="Websocket JavaFX Test">
+  	<fx:param name="server-url" value="$$context"/>
+  </jfx:javafx-desc>
 </jnlp>

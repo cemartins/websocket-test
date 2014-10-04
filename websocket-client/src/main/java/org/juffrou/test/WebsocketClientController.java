@@ -6,12 +6,13 @@ import java.nio.charset.Charset;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.stage.WindowEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
+import javafx.stage.Stage;
 
 import javax.websocket.CloseReason;
 import javax.websocket.Endpoint;
@@ -20,8 +21,13 @@ import javax.websocket.MessageHandler;
 import javax.websocket.PongMessage;
 import javax.websocket.Session;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class WebsocketClientController extends Endpoint {
-	
+
+	static final Logger logger = LogManager.getLogger(WebsocketClientController.class.getName());
+
 	@FXML
 	private Parent root;		// allows the controller to get it's corresponding stage
 
@@ -92,14 +98,21 @@ public class WebsocketClientController extends Endpoint {
 	@Override
 	public void onError(Session session, Throwable thr) {
 		super.onError(session, thr);
-		System.out.println("CLIENT DISCONNECTED");
-		thr.printStackTrace();
+		logger.error("CLIENT DISCONNECTED", thr);
 	}
 	
 	@Override
 	public void onClose(Session session, CloseReason closeReason) {
 		super.onClose(session, closeReason);
-		System.out.println("CLIENT DISCONNECTED");
+		logger.error("CLIENT DISCONNECTED");
+	}
+	
+	@FXML
+	private void init() {
+		logger.debug("Reached init");
+		Stage stage = getStage();
+		EventHandler<WindowEvent> eh = new MyCloseHandler(stage);
+		stage.setOnCloseRequest(eh);
 	}
 	
 	/**
@@ -138,12 +151,34 @@ public class WebsocketClientController extends Endpoint {
 				
 				session.getAsyncRemote().sendPong(pongload);
 				
-			} catch (IllegalArgumentException | IOException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (IllegalArgumentException | IOException | InterruptedException e) {
+				logger.error("Could not send pong response.", e);
 			}
 		}
+	}
+	
+	private class MyCloseHandler implements EventHandler<WindowEvent> {
+		
+		private final Stage stage;
+		
+		public MyCloseHandler(Stage stage) {
+			this.stage = stage;
+		}
+
+		@Override
+		public void handle(WindowEvent event) {
+			logger.debug("Window is closing");
+			event.consume();
+			if(session != null) {
+				try {
+					session.close();
+					session = null;
+				} catch (IOException e) {
+					logger.error("Could not close websocket session on window close.", e);
+				}
+			}
+			stage.close();
+		}
+		
 	}
 }

@@ -23,7 +23,7 @@ Maven - building and running
 
 To build the `websocket-test.war` file execute the maven command `mvn package`.
 
-You can run the webapp with jetty with the maven command `mvn jetty:run-exploded -f websocket-server/pom.xml`
+You can run the webapp with jetty with the maven command `mvn jetty:deploy-war -f websocket-server/pom.xml`
 * start your browser and access the url `http://localhost:8080/websocket-test/index.html`
 * choose between html page client or a JavaFx App client;
 * follow the directions.

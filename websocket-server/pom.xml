@@ -10,7 +10,8 @@
 	<packaging>war</packaging>
 
 	<properties>
-
+		<buildTS>${maven.build.timestamp}</buildTS>
+		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
 	</properties>
 	<build>
 		<finalName>${project.artifactId}</finalName>
@@ -27,28 +28,6 @@
 		</pluginManagement>
 
 		<plugins>
-			<!-- 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<id>CopyJNLP</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<mkdir dir="${project.build.directory}/${project.build.finalName}/webstart"/>
-								<unzip src="${basedir}/../websocket-client/target/websocket-client.zip" dest="${project.build.directory}/${project.build.finalName}/webstart" overwrite="true" />
-							</target>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			 -->
 			 <plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
@@ -68,19 +47,20 @@
           			-->
           			<excludeTransitive>false</excludeTransitive>
           			
-          			<encoding>UTF-8</encoding>
+          			<encoding>utf-8</encoding>
           			
           			<filenameMapping>simple</filenameMapping>
           			
           			<jnlpFiles>
           				<jnlpFile>
           					<inputTemplate>jfx-jnlp-template.vm</inputTemplate>
-          					<outputFilename>launch.jnlp</outputFilename>
+          					<outputFilename>websocket-client.jnlp</outputFilename>
           					<mainClass>${exec.mainClass}</mainClass>
           					
           					<properties>
           						<!-- properties to pass to the velocity engine -->
-          						<jdkVersion>1.8+</jdkVersion>
+          						<jdkVersion>${jdk.version}</jdkVersion>
+          						<ApplicationUrl>${homepage.url}</ApplicationUrl>
           					</properties>
           					<jarResources>
           						<jarResource>
@@ -138,15 +118,28 @@
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.2.0.v20140526</version>
+				<version>9.3.0.M0</version>
 				<configuration>
 					<contextPath>/websocket-test</contextPath>
+					<war>${project.basedir}/target/websocket-server.war</war>
+					<daemon>false</daemon>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 
 	<dependencies>
+		<dependency>
+		  <groupId>org.apache.logging.log4j</groupId>
+		  <artifactId>log4j-api</artifactId>
+		  <version>${log4j.version}</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.apache.logging.log4j</groupId>
+		  <artifactId>log4j-core</artifactId>
+		  <version>${log4j.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>javax.websocket</groupId>
 			<artifactId>javax.websocket-api</artifactId>
