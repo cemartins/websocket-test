@@ -36,9 +36,6 @@ public class WebsocketClientTest extends Application {
     private static final String SERVER_URL_PARAMETER="server-url";
     private static final String SERVER_URL="ws://localhost:8080/websocket-test/wstest";
     
-    private ClientManager client = null;
-
-    
     public static void main(String[] args) {
     	logger.debug("Reached main");
 		launch(args);
@@ -53,23 +50,10 @@ public class WebsocketClientTest extends Application {
 		Parent root = loader.load();
 		WebsocketClientController controller = (WebsocketClientController) loader.getController();
 
-		initWebsocketClient(controller);
-		
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-
-			@Override
-			public void handle(WindowEvent event) {
-				if(client != null) {
-					ExecutorService executor = client.getExecutorService();
-					client = null;
-					executor.shutdownNow();
-				}
-			}
-			
-		});
-		
 		Scene scene = new Scene(root, 480, 320);
 		primaryStage.setScene(scene);
+		
+		controller.init(getServerEndpointAddress());
 		
 		primaryStage.show();
 	}
@@ -89,47 +73,6 @@ public class WebsocketClientTest extends Application {
 		return URI.create(serverEndpointStr);
 	}
 
-	private void initWebsocketClient(WebsocketClientController controller) {
-    	logger.debug("Reached initWebsocketClient");
-		
-		try {
-			
-			System.getProperties().put("javax.net.debug", "all");
-			
-			client = AccessController.doPrivileged(new PrivilegedExceptionAction<ClientManager>() {
-
-				@Override
-				public ClientManager run() throws Exception {
-					
-//					ClientEndpointConfig cec = ClientEndpointConfig.Builder.create().build();
-
-					ThreadPoolConfig workerThreadPoolConfig = ThreadPoolConfig.defaultConfig();					
-					workerThreadPoolConfig.setInitialClassLoader(this.getClass().getClassLoader());
-					workerThreadPoolConfig.setDaemon(false);
-					workerThreadPoolConfig.setMaxPoolSize(4);
-					workerThreadPoolConfig.setCorePoolSize(3);
-					
-					ClientManager cm = ClientManager.createClient(JdkClientContainer.class.getName());
-					cm = ClientManager.createClient(JdkClientContainer.class.getName());
-//					cm.getProperties().put(ClientProperties.RECONNECT_HANDLER, reconnectHandler);
-					cm.getProperties().put(ClientProperties.SHARED_CONTAINER, false);
-					cm.getProperties().put(ClientProperties.WORKER_THREAD_POOL_CONFIG, workerThreadPoolConfig);
-
-//					cm.connectToServer(controller, cec, URI.create(SERVER_URL));
-					cm.asyncConnectToServer(controller, getServerEndpointAddress());
-					return cm;
-				}
-				
-			});
-						
-		} catch (PrivilegedActionException e) {
-	    	logger.error("Security Error establishing client connection", e);
-			e.printStackTrace();
-		} catch (Exception e) {
-	    	logger.error("Error establishing client connection", e);
-			e.printStackTrace();
-		}
-	}
 	
 	@SuppressWarnings("restriction")
 	@Override
@@ -177,12 +120,7 @@ public class WebsocketClientTest extends Application {
 	@Override
 	public void stop() throws Exception {
 		logger.debug("Reached stop");
-		if(client != null) {
-			ExecutorService executor = client.getExecutorService();
-			client = null;
-			executor.shutdownNow();
-			super.stop();
-		}
+		super.stop();
 	}
 
 }

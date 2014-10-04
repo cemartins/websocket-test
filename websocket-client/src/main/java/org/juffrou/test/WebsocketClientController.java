@@ -1,30 +1,30 @@
 package org.juffrou.test;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
+import java.net.URI;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.stage.WindowEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
-
-import javax.websocket.CloseReason;
-import javax.websocket.Endpoint;
-import javax.websocket.EndpointConfig;
-import javax.websocket.MessageHandler;
-import javax.websocket.PongMessage;
-import javax.websocket.Session;
+import javafx.stage.WindowEvent;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.glassfish.tyrus.client.ClientManager;
+import org.glassfish.tyrus.client.ClientProperties;
+import org.glassfish.tyrus.client.ThreadPoolConfig;
+import org.glassfish.tyrus.container.jdk.client.JdkClientContainer;
 
-public class WebsocketClientController extends Endpoint {
+public class WebsocketClientController {
 
 	static final Logger logger = LogManager.getLogger(WebsocketClientController.class.getName());
 
@@ -46,7 +46,8 @@ public class WebsocketClientController extends Endpoint {
 	@FXML
 	private TextArea receiveTextArea;
 	
-	private Session session = null;
+	private ClientManager client;
+	private WebsocketClientEndpoint websocketClientEndpoint;
 	
 
 	@SuppressWarnings("restriction")
@@ -54,66 +55,77 @@ public class WebsocketClientController extends Endpoint {
 	private void sendButtonPressed(ActionEvent action) {
 		// Send message to server
 		String text = sendTextArea.getText();
-		session.getAsyncRemote().sendText(text);
+		websocketClientEndpoint.sendTextToServer(text);
 	}
 	
 	@SuppressWarnings("restriction")
 	@FXML
 	private void startPongButtonPressed(ActionEvent action) {
-		session.getAsyncRemote().sendText("STARTPONGING");
+		websocketClientEndpoint.sendTextToServer("STARTPONGING");
 	}
 	
 	@SuppressWarnings("restriction")
 	@FXML
 	private void stopPongButtonPressed(ActionEvent action) {
-		session.getAsyncRemote().sendText("STOPPONGING");
+		websocketClientEndpoint.sendTextToServer("STOPPONGING");
 		receiveTextArea.clear();
 	}
 
 	
-	@Override
-	public void onOpen(Session session, EndpointConfig config) {
-		
-		this.session = session;
-		
-		System.out.println("CLIENT CONNECTED");
-		
-		session.addMessageHandler(new MessageHandler.Whole<String>() {
-			@Override
-			public void onMessage(String message) {
-				// Message received from the server - Update the textarea on the JFX thread
-				Platform.runLater(new Runnable() {
-			        @Override
-			        public void run() {
-						receiveTextArea.setText(message);
-			        }
-			   });
-			}
-		});
-
-		session.addMessageHandler(new MyPongHandler(session));
-
-	}
 	
-	@Override
-	public void onError(Session session, Throwable thr) {
-		super.onError(session, thr);
-		logger.error("CLIENT DISCONNECTED", thr);
-	}
-	
-	@Override
-	public void onClose(Session session, CloseReason closeReason) {
-		super.onClose(session, closeReason);
-		logger.error("CLIENT DISCONNECTED");
-	}
-	
-	@FXML
-	private void init() {
-		logger.debug("Reached init");
+	public void init(URI serverEndpointAddress) {
+		logger.debug("Reached controller initialize");
+		
+		initWebsocketClient(serverEndpointAddress);
 		Stage stage = getStage();
 		EventHandler<WindowEvent> eh = new MyCloseHandler(stage);
 		stage.setOnCloseRequest(eh);
+		
 	}
+
+	private WebsocketClientEndpoint initWebsocketClient(URI serverEndpointAddress) {
+    	logger.debug("Reached initWebsocketClient");
+    	
+    	websocketClientEndpoint = new WebsocketClientEndpoint();
+		websocketClientEndpoint.setReceiveTextArea(receiveTextArea);
+		
+		try {
+			
+			System.getProperties().put("javax.net.debug", "all");
+			
+			client = AccessController.doPrivileged(new PrivilegedExceptionAction<ClientManager>() {
+
+				@Override
+				public ClientManager run() throws Exception {
+					
+					ThreadPoolConfig workerThreadPoolConfig = ThreadPoolConfig.defaultConfig();					
+					workerThreadPoolConfig.setInitialClassLoader(this.getClass().getClassLoader());
+					workerThreadPoolConfig.setDaemon(false);
+					workerThreadPoolConfig.setMaxPoolSize(4);
+					workerThreadPoolConfig.setCorePoolSize(3);
+					
+					ClientManager cm = ClientManager.createClient(JdkClientContainer.class.getName());
+					cm = ClientManager.createClient(JdkClientContainer.class.getName());
+					cm.getProperties().put(ClientProperties.SHARED_CONTAINER, false);
+					cm.getProperties().put(ClientProperties.WORKER_THREAD_POOL_CONFIG, workerThreadPoolConfig);
+
+					cm.asyncConnectToServer(websocketClientEndpoint, serverEndpointAddress);
+					return cm;
+				}
+				
+			});
+						
+		} catch (PrivilegedActionException e) {
+	    	logger.error("Security Error establishing client connection", e);
+			e.printStackTrace();
+		} catch (Exception e) {
+	    	logger.error("Error establishing client connection", e);
+			e.printStackTrace();
+		}
+		
+		return websocketClientEndpoint;
+	}
+
 	
 	/**
 	 * Obtain this controller's stage
@@ -123,39 +135,6 @@ public class WebsocketClientController extends Endpoint {
 		return (Stage) root.getScene().getWindow();
 	}
 	
-	/**
-	 * Receives a PONG from the server and sends a PONG to the server
-	 * @author cemartins
-	 *
-	 */
-	private class MyPongHandler implements MessageHandler.Whole<PongMessage> {
-		private final Session session;
-		private final ByteBuffer pongload;
-
-		public MyPongHandler(Session session) {
-			this.session = session;
-			this.pongload = ByteBuffer.wrap("asdfghjkl".getBytes(Charset.defaultCharset()));
-		}
-		
-		@Override
-		public void onMessage(PongMessage message) {
-			try {
-				Platform.runLater(new Runnable() {
-			        @Override
-			        public void run() {
-						receiveTextArea.appendText("Pong...\n");
-			        }
-			   });
-
-				Thread.sleep(1000);
-				
-				session.getAsyncRemote().sendPong(pongload);
-				
-			} catch (IllegalArgumentException | IOException | InterruptedException e) {
-				logger.error("Could not send pong response.", e);
-			}
-		}
-	}
 	
 	private class MyCloseHandler implements EventHandler<WindowEvent> {
 		
@@ -165,19 +144,21 @@ public class WebsocketClientController extends Endpoint {
 			this.stage = stage;
 		}
 
+		@SuppressWarnings("restriction")
 		@Override
 		public void handle(WindowEvent event) {
-			logger.debug("Window is closing");
-			event.consume();
-			if(session != null) {
-				try {
-					session.close();
-					session = null;
-				} catch (IOException e) {
-					logger.error("Could not close websocket session on window close.", e);
-				}
+			EventType<WindowEvent> eventType = event.getEventType();
+			logger.debug("Window event: " + eventType.getName());
+			websocketClientEndpoint.setReceiveTextArea(null);
+			websocketClientEndpoint.close();
+			try {
+				Thread.sleep(500);  // wait for websocket to close
+			} catch (InterruptedException e) {
+				logger.error("cant sleep", e);
 			}
-			stage.close();
+			client.shutdown();
+			Platform.exit();
+			System.exit(0);
 		}
 		
 	}
