@@ -21,7 +21,22 @@ can have spring dependencies automatically injected with the `@Autowired` annota
 Maven - building and running
 ----------------------------
 
-To build the `websocket-test.war` file execute the maven command `mvn package`.
+Prerequisites:
+Get a code signing certificate and create a profile in your maven settings.xml file with the following properties:
+		<profile>
+			<id>mycert</id>
+			<properties>
+				<keystore.dir>PATH/TO/FOLDER/CONTAINING/KEYSTORE</keystore.dir>
+				<keystore.file>KEYSTORE_FILENAME</keystore.file>
+				<keystore.type>KEYSTORE_TYPE (ex. pkcs12)</keystore.type>
+				<keystore.pass>KEYSTORE_PASSWORD</keystore.pass>
+				<certificate.alias>CERTIFICATE_ALIAS</certificate.alias>
+				<certificate.pass>CERTIFICATE_PASSWORD</certificate.pass>
+			</properties>
+		</profile>
+
+
+To build the `websocket-test.war` file execute the maven command `mvn -Pmycert package`.
 
 You can run the webapp with jetty with the maven command `mvn jetty:deploy-war -f websocket-server/pom.xml`
 * start your browser and access the url `http://localhost:8080/websocket-test/index.html`

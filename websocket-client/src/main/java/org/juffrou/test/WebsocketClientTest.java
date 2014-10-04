@@ -50,7 +50,7 @@ public class WebsocketClientTest extends Application {
 		Parent root = loader.load();
 		WebsocketClientController controller = (WebsocketClientController) loader.getController();
 
-		Scene scene = new Scene(root, 480, 320);
+		Scene scene = new Scene(root, 640, 460);
 		primaryStage.setScene(scene);
 		
 		controller.init(getServerEndpointAddress());
