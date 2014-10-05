@@ -91,7 +91,7 @@ public class WebsocketClientController {
 		
 		try {
 			
-			System.getProperties().put("javax.net.debug", "all");
+//			System.getProperties().put("javax.net.debug", "all");  // uncomment this line if you want tyrus debug to be output to the console
 			
 			client = AccessController.doPrivileged(new PrivilegedExceptionAction<ClientManager>() {
 

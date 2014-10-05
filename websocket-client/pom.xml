@@ -12,10 +12,6 @@
 		<name>Juffrou</name>
 	</organization>
 
-	<properties>
-		<javafx.tools.ant.jar>${java.home}/../lib/ant-javafx.jar</javafx.tools.ant.jar>
-	</properties>
-
 	<build>
 		<finalName>${project.artifactId}</finalName>
 
@@ -42,82 +38,10 @@
 					<mainClass>${exec.mainClass}</mainClass>
 				</configuration>
 			</plugin>
-			<!-- 
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>webstart-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>jnlp-inline</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<makeArchive>true</makeArchive>
-					<updateManifestEntries>
-						<Application-Name>${project.name}</Application-Name>
-						<Permissions>all-permissions</Permissions>
-						<JavaFX-Version>8+</JavaFX-Version>
-						<JavaFX-Application-Class>${exec.mainClass}</JavaFX-Application-Class>
-						<Main-Class>${exec.mainClass}</Main-Class>
-					</updateManifestEntries>
-					<jnlp>
-						<j2seVersion>1.8+</j2seVersion>
-						<inputTemplate>jfx-jnlp-template.vm</inputTemplate>
-						<mainClass>${exec.mainClass}</mainClass>
-					</jnlp>
-
-					<sign>
-						<keystore>/tmp/keystore</keystore>
-						<keypass>m2m2m2</keypass>
-						<storepass>m2m2m2</storepass>
-						<alias>alias</alias>
-						<validity>180</validity>
-
-						<dnameCn>Carlos E Martins</dnameCn>
-						<dnameOu>None</dnameOu>
-						<dnameO>Home</dnameO>
-						<dnameL>Oeiras</dnameL>
-						<dnameSt>Lisboa</dnameSt>
-						<dnameC>PT</dnameC>
-
-						<verify>true</verify>
-
-						<keystoreConfig>
-							<delete>true</delete>
-							<gen>true</gen>
-						</keystoreConfig>
-					</sign>
-					
-					<verbose>true</verbose>
-
-				</configuration>
-				<dependencies>
-					<dependency>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>keytool-maven-plugin</artifactId>
-						<version>1.5</version>
-					</dependency>
-
-				</dependencies>
-			</plugin>
-			 -->
 		</plugins>
 	</build>
 
 	<dependencies>
-		<!-- JAVA FX -->
-		<!-- 
-		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>javafx</artifactId>
-			<version>8</version>
-			<systemPath>${java.home}/lib/ext/jfxrt.jar</systemPath>
-			<scope>system</scope>
-		</dependency>
-		 -->
 		<dependency>
 		  <groupId>org.apache.logging.log4j</groupId>
 		  <artifactId>log4j-api</artifactId>

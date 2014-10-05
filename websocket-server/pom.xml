@@ -13,6 +13,7 @@
 		<buildTS>${maven.build.timestamp}</buildTS>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
 	</properties>
+
 	<build>
 		<finalName>${project.artifactId}</finalName>
 
@@ -42,9 +43,6 @@
 				<configuration>
 					<outputDirectoryName>webstart</outputDirectoryName>
 					
-					<!--
-          				Set to true to exclude all transitive dependencies. Default is false.
-          			-->
           			<excludeTransitive>false</excludeTransitive>
           			
           			<encoding>utf-8</encoding>
@@ -81,15 +79,6 @@
 						<keypass>${certificate.pass}</keypass>
 						<storepass>${keystore.pass}</storepass>
 						<alias>${certificate.alias}</alias>
-						<!-- 
-						<validity>365</validity>
-						<dnameCn>Carlos E Martins</dnameCn>
-						<dnameOu>None</dnameOu>
-						<dnameO>Home</dnameO>
-						<dnameL>Oeiras</dnameL>
-						<dnameSt>Lisboa</dnameSt>
-						<dnameC>PT</dnameC>
-						 -->
 
 						<verify>true</verify>
 
