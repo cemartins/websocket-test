@@ -31,6 +31,7 @@ public class MyApplication implements ServletContextListener {
 		final ServerContainer serverContainer = (ServerContainer) container.getAttribute(SERVER_CONTAINER_ATTRIBUTE);
 		try {
 			serverContainer.addEndpoint(new MyEndpointConfig(MyEndpoint.class, "/wstest"));
+			System.out.println("REGISTERED WEBSOCKET ENDPOINT AT /wtest");
 		} catch (DeploymentException e) {
 			e.printStackTrace();
 		}

@@ -1,5 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.juffrou.test</groupId>
@@ -12,6 +11,7 @@
 	<properties>
 		<buildTS>${maven.build.timestamp}</buildTS>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
+		<jetty.version>9.3.6.v20151106</jetty.version>
 	</properties>
 
 	<build>
@@ -29,7 +29,7 @@
 		</pluginManagement>
 
 		<plugins>
-			 <plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
 				<executions>
@@ -42,36 +42,36 @@
 				</executions>
 				<configuration>
 					<outputDirectoryName>webstart</outputDirectoryName>
-					
-          			<excludeTransitive>false</excludeTransitive>
-          			
-          			<encoding>utf-8</encoding>
-          			
-          			<filenameMapping>simple</filenameMapping>
-          			
-          			<jnlpFiles>
-          				<jnlpFile>
-          					<inputTemplate>jfx-jnlp-template.vm</inputTemplate>
-          					<outputFilename>websocket-client.jnlp</outputFilename>
-          					<mainClass>${exec.mainClass}</mainClass>
-          					
-          					<properties>
-          						<!-- properties to pass to the velocity engine -->
-          						<jdkVersion>${jdk.version}</jdkVersion>
-          						<ApplicationUrl>${homepage.url}</ApplicationUrl>
-          					</properties>
-          					<jarResources>
-          						<jarResource>
-          							<groupId>${project.groupId}</groupId>
-          							<artifactId>websocket-client</artifactId>
-          							<version>${project.version}</version>
-          							<outputJarVersion>false</outputJarVersion>
-          							<mainClass>${exec.mainClass}</mainClass>
-          						</jarResource>
-          					</jarResources>
-          				</jnlpFile>
-          			</jnlpFiles>
-          			
+
+					<excludeTransitive>false</excludeTransitive>
+
+					<encoding>utf-8</encoding>
+
+					<filenameMapping>simple</filenameMapping>
+
+					<jnlpFiles>
+						<jnlpFile>
+							<inputTemplate>jfx-jnlp-template.vm</inputTemplate>
+							<outputFilename>websocket-client.jnlp</outputFilename>
+							<mainClass>${exec.mainClass}</mainClass>
+
+							<properties>
+								<!-- properties to pass to the velocity engine -->
+								<jdkVersion>${jdk.version}</jdkVersion>
+								<ApplicationUrl>${homepage.url}</ApplicationUrl>
+							</properties>
+							<jarResources>
+								<jarResource>
+									<groupId>${project.groupId}</groupId>
+									<artifactId>websocket-client</artifactId>
+									<version>${project.version}</version>
+									<outputJarVersion>false</outputJarVersion>
+									<mainClass>${exec.mainClass}</mainClass>
+								</jarResource>
+							</jarResources>
+						</jnlpFile>
+					</jnlpFiles>
+
 					<sign>
 						<!-- Properties collected from settings.xml -->
 						<keystore>${keystore.dir}/${keystore.file}</keystore>
@@ -87,10 +87,10 @@
 							<gen>false</gen>
 						</keystoreConfig>
 					</sign>
-					
-					<!-- <unsign>true</unsign>  --> <!-- unsign already signed packages and sign them with own key -->
+
+					<!-- <unsign>true</unsign> --> <!-- unsign already signed packages and sign them with own key -->
 					<gzip>false</gzip>
-					
+
 					<verbose>true</verbose>
 
 				</configuration>
@@ -107,7 +107,7 @@
 			<plugin>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>9.3.0.M0</version>
+				<version>${jetty.version}</version>
 				<configuration>
 					<contextPath>/websocket-test</contextPath>
 					<war>${project.basedir}/target/websocket-server.war</war>
@@ -119,14 +119,14 @@
 
 	<dependencies>
 		<dependency>
-		  <groupId>org.apache.logging.log4j</groupId>
-		  <artifactId>log4j-api</artifactId>
-		  <version>${log4j.version}</version>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+			<version>${log4j.version}</version>
 		</dependency>
 		<dependency>
-		  <groupId>org.apache.logging.log4j</groupId>
-		  <artifactId>log4j-core</artifactId>
-		  <version>${log4j.version}</version>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>${log4j.version}</version>
 		</dependency>
 
 		<dependency>
@@ -160,6 +160,96 @@
 			<groupId>org.codehaus.mojo</groupId>
 			<artifactId>webstart-jnlp-servlet</artifactId>
 			<version>1.0-beta-6</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>3.1</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>3.1.4.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>3.2.3.RELEASE</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.tyrus</groupId>
+			<artifactId>tyrus-client</artifactId>
+			<version>1.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.tyrus</groupId>
+			<artifactId>tyrus-container-jdk-client</artifactId>
+			<version>1.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${jetty.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+			<version>${jetty.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-spring</artifactId>
+			<version>${jetty.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-http</artifactId>
+			<version>${jetty.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-jmx</artifactId>
+			<version>${jetty.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty.websocket</groupId>
+			<artifactId>javax-websocket-server-impl</artifactId>
+			<version>${jetty.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty.websocket</groupId>
+			<artifactId>websocket-server</artifactId>
+			<version>${jetty.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty.websocket</groupId>
+			<artifactId>websocket-servlet</artifactId>
+			<version>${jetty.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.websocket</groupId>
+			<artifactId>javax.websocket-api</artifactId>
+			<version>1.1</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

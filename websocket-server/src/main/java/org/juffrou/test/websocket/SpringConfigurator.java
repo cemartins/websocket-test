@@ -41,6 +41,9 @@ public class SpringConfigurator extends Configurator {
 
 	private static final String NO_VALUE = ObjectUtils.identityToString(new Object());
 
+	public SpringConfigurator() {
+		System.out.println("SpringConfigurator was INSTANCIATED");
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

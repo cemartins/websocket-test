@@ -104,7 +104,7 @@ public class WebsocketClientController {
 					workerThreadPoolConfig.setMaxPoolSize(4);
 					workerThreadPoolConfig.setCorePoolSize(3);
 					
-					ClientManager cm = ClientManager.createClient(JdkClientContainer.class.getName());
+					ClientManager cm;
 					cm = ClientManager.createClient(JdkClientContainer.class.getName());
 					cm.getProperties().put(ClientProperties.SHARED_CONTAINER, false);
 					cm.getProperties().put(ClientProperties.WORKER_THREAD_POOL_CONFIG, workerThreadPoolConfig);
