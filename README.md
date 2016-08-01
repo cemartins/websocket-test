@@ -1,5 +1,5 @@
 # websocket-test
-==================
+=================
 
 Small webapp to demonstrate one way to setup websockets with spring framework version 3.x.
 
@@ -73,3 +73,8 @@ You can also deploy and run websocket-test in WildFly 8:
 Happy testing :)
 
 Note: SpringConfigurator was developed by Rossen Stoyanchev and introduced in spring-core version 4.0.
+
+
+## ![Creative Commons License](https://i.creativecommons.org/l/by/4.0/88x31.png)
+
+websocket-test is licensed under a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/).

@@ -6,6 +6,31 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
+
+    <developers>
+        <developer>
+            <name>Carlos Martins</name>
+            <email>carlos.mfa.martins@gmail.com</email>
+            <organization>Juffrou</organization>
+            <organizationUrl>http://juffrou.github.io</organizationUrl>
+            <timezone>Europe/Lisbon</timezone>
+            <roles>
+                <role>owner</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Licença Creative Commons" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />Este trabalho está licenciado com uma Licença <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons - Atribuição  4.0 Internacional</a>.
+
+    <licenses>
+        <license>
+            <name>Creative Commons - Attribution 4.0 International License</name>
+            <url>http://creativecommons.org/licenses/by/4.0/</url>
+            <distribution>repo</distribution>
+            <comments>Attribution 4.0 International (CC BY 4.0)</comments>
+        </license>
+    </licenses>
+
 	<properties>
 		<exec.mainClass>org.juffrou.test.WebsocketClientTest</exec.mainClass>
 		<jdk.version>1.8</jdk.version>
@@ -13,6 +38,7 @@
 		<homepage.url>https://github.com/cemartins/websocket-test</homepage.url>
 		<log4j.version>2.0.2</log4j.version>
 	</properties>
+
 
 	<build>
 		<pluginManagement>
