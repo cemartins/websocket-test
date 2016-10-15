@@ -3,6 +3,8 @@ package org.juffrou.test.websocket;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.websocket.CloseReason;
 import javax.websocket.Endpoint;
@@ -21,6 +23,9 @@ public class MyEndpoint extends Endpoint {
 
 	@Autowired
 	private MyService myService;
+	private String name = "";
+	private String age = "unknown";
+	private String locatedAt = "noWHERE";
 	
 	public MyEndpoint() {
 		System.out.println("SERVER ENDPOINT INSTANCIATED");
@@ -59,21 +64,31 @@ public class MyEndpoint extends Endpoint {
 		
 		@Override
 		public void onMessage(String message) {
-			if("STOPPONGING".equals(message))
+			
+			if ("STOPPONGING".equals(message))
 				pongHandler.setResponding(false);
-			else
-				if("STARTPONGING".equals(message)) {
-					pongHandler.setResponding(true);
-					try {
-						session.getAsyncRemote().sendPong(pongload);
-					} catch (IllegalArgumentException | IOException e) {
-						e.printStackTrace();
-					}
+			else if ("STARTPONGING".equals(message)) {
+				pongHandler.setResponding(true);
+				try {
+					session.getAsyncRemote().sendPong(pongload);
+				} catch (IllegalArgumentException | IOException e) {
+					e.printStackTrace();
 				}
-				else {
-					String greeting = myService.getGreeting();
-					session.getAsyncRemote().sendText(greeting + ", got your message (" + message + "). Thanks!");
+			} else {
+				Map<String, String> pathParameters = session.getPathParameters();
+				name = pathParameters.get("name");
+				
+				Map<String, String> queryParams = getQueryMap(session.getQueryString());
+		        if (queryParams.containsKey("age")) {
+		        	age = queryParams.get("age");
+		        }		        
+		        if (queryParams.containsKey("locatedAt")) {
+		        	locatedAt = queryParams.get("locatedAt");
 				}
+		        
+				String greeting = myService.getGreeting();
+				session.getAsyncRemote().sendText(greeting + name + " " + age + " y/o " + "FROM " + locatedAt + ", got your message (" + message + "). Thanks!");
+			}
 		}
 	}
 	
@@ -89,7 +104,7 @@ public class MyEndpoint extends Endpoint {
 		@Override
 		public void onMessage(PongMessage message) {
 			try {
-				if(isResponding)
+				if (isResponding)
 					session.getAsyncRemote().sendPong(pongload);
 			} catch (IllegalArgumentException | IOException e) {
 				e.printStackTrace();
@@ -103,6 +118,24 @@ public class MyEndpoint extends Endpoint {
 		public void setResponding(boolean isResponding) {
 			this.isResponding = isResponding;
 		}
-		
+
+	}
+
+	/**
+	 * Returning Query Parameters as a Map.
+	 * 
+	 * @param query
+	 * @return a map with Query Parameters
+	 */
+	public static Map<String, String> getQueryMap(String query) {
+		Map<String, String> map = new HashMap<String, String>();
+		if (query != null) {
+			String[] params = query.split("&");
+			for (String param : params) {
+				String[] nameval = param.split("=");
+				map.put(nameval[0], nameval[1]);
+			}
+		}
+		return map;
 	}
 }
