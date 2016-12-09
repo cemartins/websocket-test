@@ -11,7 +11,7 @@
 	<properties>
 		<buildTS>${maven.build.timestamp}</buildTS>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss</maven.build.timestamp.format>
-		<jetty.version>9.3.6.v20151106</jetty.version>
+		<jetty.version>9.3.14.v20161028</jetty.version>
 	</properties>
 
 	<build>
@@ -109,9 +109,11 @@
 				<artifactId>jetty-maven-plugin</artifactId>
 				<version>${jetty.version}</version>
 				<configuration>
-					<contextPath>/websocket-test</contextPath>
 					<war>${project.basedir}/target/websocket-server.war</war>
 					<daemon>false</daemon>
+					<webApp>
+						<contextPath>/websocket-test</contextPath>
+					</webApp>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -132,7 +134,7 @@
 		<dependency>
 			<groupId>javax.websocket</groupId>
 			<artifactId>javax.websocket-api</artifactId>
-			<version>1.0</version>
+			<version>1.1</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
@@ -171,12 +173,6 @@
 			<groupId>cglib</groupId>
 			<artifactId>cglib</artifactId>
 			<version>3.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>3.1.4.RELEASE</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -243,12 +239,6 @@
 			<groupId>org.eclipse.jetty.websocket</groupId>
 			<artifactId>websocket-servlet</artifactId>
 			<version>${jetty.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.websocket</groupId>
-			<artifactId>javax.websocket-api</artifactId>
-			<version>1.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
