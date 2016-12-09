@@ -1,6 +1,7 @@
 package org.juffrou.test.websocket;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,8 @@ public class MyEndpointConfig implements ServerEndpointConfig {
 
 	private final String path;
 	private final Class<?> endpointClass;
-	
+	private final Map<String, Object> userProperties = new HashMap<String, Object>();
+
 	MyEndpointConfig(Class<?> endpointClass, String path) {
 		this.endpointClass = endpointClass;
 		this.path = path;
@@ -35,7 +37,7 @@ public class MyEndpointConfig implements ServerEndpointConfig {
 
 	@Override
 	public Map<String, Object> getUserProperties() {
-		return Collections.emptyMap();
+		return userProperties;
 	}
 
 	@Override

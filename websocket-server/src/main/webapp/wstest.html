@@ -56,7 +56,11 @@
         var ws = null;
         var url = null;
         var transports = [];
-
+		
+        var name = "Behelit";
+		var age = "37";
+		var locatedAt = "someWHERE";
+		
         function setConnected(connected) {
             document.getElementById('connect').disabled = connected;
             document.getElementById('disconnect').disabled = !connected;
@@ -64,11 +68,10 @@
         }
 
         function connect() {
-
             if (window.location.protocol == 'http:') {
-                url = 'ws://' + window.location.host + '/websocket-test/wstest';
+                url = 'ws://' + window.location.host + '/websocket-test/wstest/' + name + '/?age=' + age + '&locatedAt=' + locatedAt;
             } else {
-                url = 'wss://' + window.location.host + '/websocket-test/wstest';
+                url = 'wss://' + window.location.host + '/websocket-test/wstest/' + name + '/?age=' + age + '&locatedAt=' + locatedAt;
             }
 
             ws = new WebSocket(url); 

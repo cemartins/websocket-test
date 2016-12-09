@@ -27,11 +27,11 @@ public class MyApplication implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 		
 		ServletContext container = sce.getServletContext();
-
+		String endpointPath = "/wstest/{name}";
 		final ServerContainer serverContainer = (ServerContainer) container.getAttribute(SERVER_CONTAINER_ATTRIBUTE);
 		try {
-			serverContainer.addEndpoint(new MyEndpointConfig(MyEndpoint.class, "/wstest"));
-			System.out.println("REGISTERED WEBSOCKET ENDPOINT AT /wtest");
+			serverContainer.addEndpoint(new MyEndpointConfig(MyEndpoint.class, endpointPath));
+			System.out.println("REGISTERED WEBSOCKET ENDPOINT AT" + endpointPath);
 		} catch (DeploymentException e) {
 			e.printStackTrace();
 		}
